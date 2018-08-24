@@ -1,12 +1,10 @@
 import sqlite3 as lite
-import sys
 import os
 import unittest
 
 path = os.path.dirname(__file__) + "\\test.db"
 con = lite.connect(path)
 cur = con.cursor()
-
 
 class MVCModel:
     
@@ -20,7 +18,7 @@ class MVCModel:
         for row in results:
             name = row[0]
         return id,name
-            
+    
     def requestAll(self):      
         cur.execute("SELECT * FROM TodoList")       
         works=[]
@@ -41,15 +39,13 @@ class MVCModel:
                 break
         return isExisted 
 
-    def getIdQuantily(self):
-        
+    def getIdQuantily(self):        
         cur.execute("SELECT id FROM TodoList")        
         id_temp=cur.fetchall()
         return len(id_temp)        
                  
     def add(self, id, work_name, starting_date, ending_date, status): 
-        cur.execute("INSERT INTO TodoList (id, WorkName, StatingDate , EndingDate , Status) VALUES (?, ?, ?, ?, ?)", (id, work_name, starting_date, ending_date, status))
-        
+        cur.execute("INSERT INTO TodoList (id, WorkName, StatingDate , EndingDate , Status) VALUES (?, ?, ?, ?, ?)", (id, work_name, starting_date, ending_date, status))        
         con.commit()
         id_temp,name_temp=self.request(id,'WorkName')
         print(" \'{}\' is added!".format(name_temp))
@@ -68,8 +64,7 @@ class MVCModel:
         
     def delete(self,id):
         cur.execute("DELETE FROM TodoList WHERE id = %d" % id)
-        con.commit()
-    
+        con.commit()    
 
 class MVCController:    
 
@@ -78,7 +73,6 @@ class MVCController:
         self.view = MVCView()
       
     def main(self):
-
         print("Welcome to the Todo List") 
         order=input('Do you want to show To do List? (y/n): ')            
         if order =='y':
@@ -130,11 +124,10 @@ class MVCController:
             _,workName=self.model.request(id,'WorkName')
             self.model.delete(id)
             self.view.displayDeleted(id,workName)
-         self.view.showAll(self.model.requestAll())      
-
+         self.view.showAll(self.model.requestAll())   
 
 class MVCView:    
-
+    
     def showAll(self, posts):
         print('{:^68}'.format('**** To do List ****'))
         print (' '+'_'*67)
